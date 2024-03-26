@@ -1,21 +1,18 @@
 ---
-title: "Centrala Gränsvärdessatsen (CGS)"
-subtitle: "Datorlaboration 2"
+title: "Central Limit Theorem (CLT)"
+subtitle: "Computer Lab 2"
 abstract: |
- Syftet med dagens laboration är att du ska:
+ The purpose of today's lab is for you to:
    
-  - illustrera centrala gränsvärdessatsen (CGS) med hjälp av simulering
-  - använda CGS i en praktisk situation
-  - arbeta med kursens Miniprojekt I
+  - illustrate the Central Limit Theorem (CLT) using simulation
+  - apply CLT in a practical situation
+  - work on Mini Project I for the course
 author: 
-  - name: "Skriv ditt namn här"
-    affiliation: "Lunds Universitet"
-date: "`r Sys.Date()`"
+  - name: "Insert Your Name Here"
+date: today
 toc: true
 number-sections: true
 highlight-style: pygments
-lang: sv
-language: sv_language.yml # detta kommer att gör till att all text är på Svenska
 format: 
   html:
     code-fold: true
@@ -26,143 +23,143 @@ format:
   docx: default
 ---
 
-## Förberedelseuppgifter {.unnumbered}
+## Preparation Tasks {.unnumbered}
 
-Repetera begreppen *normalfördelning, väntevärde och varians för en summa (eller   medelvärde) av oberoende slumpvariabler*. 
+Review the concepts of *normal distribution, expected value, and variance for a sum (or average) of independent random variables*.
 
-Du skall ha gjort följande uppgifter **innan** du kommer till laborationen.
+You should have completed the following tasks **before** attending the lab.
 
 :::{.callout-warning icon=false}
-### Hemuppgift 1
-Gör **Dig:3.3.2\_5** och **3.96** och **Dig:3.4.5\_1** på övning 5.
+### Homework 1
+Complete **Dig:3.3.2\_5**, **3.96**, and **Dig:3.4.5\_1** in Exercise 5.
 :::
 
 :::{.callout-warning icon=false}
-### Hemuppgift 2
-Försök att med egna ord beskriva vad centrala gränsvärdessatsen säger.
+### Homework 2
+Attempt to describe in your own words what the Central Limit Theorem states.
 :::
 
 :::{.callout-warning icon=false}
-### Hemuppgift 3
-Repetera vad du gjorde vid laboration 1 och vilka metoder du använder för att simulera slumptal och för att anpassa en fördelning till data. 
+### Homework 3
+Review what you did in Lab 1 and the methods you use for simulating random numbers and fitting a distribution to data.
 :::
 
 
-# Centrala gränsvärdessatsen
+# Central Limit Theorem
 
-> Adderar man (eller beräknar medelvärdet) av flera oberoende normalfördelade slumpvariabler är summan också normalfördelad. Men vad händer om man lägger ihop flera variabler som alla är rektangelfördelade? Vilken fördelning fås om man adderar exponentialfördelade variabler?
+> If one adds (or calculates the mean) of several independent normally distributed random variables, the sum is also normally distributed. But what happens if one adds several variables that are all uniformly distributed? What distribution is obtained if one adds exponentially distributed variables?
 >
-> Centrala gränsvärdessatsen (CGS) säger att om man adderar ett stort antal oberoende variabler från en godtycklig fördelning blir summan (eller medelvärdet) normalfördelad. I formler: om $n$ är tillräckligt stort gäller att $Z_n = X_1 + X_2 + \ldots + X_n$ är approximativt normalfördelad oavsett vilket fördelning $X_1, \ldots, X_n$ har. Med några simuleringar ska du undersöka om detta tycks stämma, där vi utgår från några olika fördelningar för $X$-variablerna.
+> The Central Limit Theorem (CLT) states that if a large number of independent variables from any distribution are added, the sum (or mean) becomes approximately normally distributed. In formulas: if $n$ is sufficiently large, $Z_n = X_1 + X_2 + \ldots + X_n$ is approximately normally distributed regardless of the distribution of $X_1, \ldots, X_n$. You will investigate whether this seems to be true through some simulations, where we start with some different distributions for the $X$ variables.
 
 :::{.callout-note icon=false}
-### Uppgift 1.1
-Simulera 1000 slumptal från en rektangelfördelning, $R(0, 1)$ och lägg dem i variabeln `unif1`. Använd `hist()` och `qqnorm()` för att konstatera att slumptalen är rektangelfördelade och definitivt inte passar till en normalfördelning.
+### Task 1.1
+Simulate 1000 random numbers from a uniform distribution, $R(0, 1)$, and store them in the variable `unif1`. Use `hist()` and `qqnorm()` to confirm that the random numbers are uniformly distributed and definitely do not fit a normal distribution.
 :::
 
 ```{r}
 unif1 <- runif(1000,0,1)
-# skriv din R-kod här
+# write your R code here
 ```
 
-<!-- ta bort detta och skriv dina slutsatser i enkel text -->
+<!-- remove this and write your conclusions in simple text -->
 
 :::{.callout-note icon=false}
-### Uppgift 1.2
-Simulera 1000 nya slumptal från en rektangelfördelning, $R(0, 1)$ och lägg dem i variabeln `unif2`. Summera sedan de gamla och de nya slumptalen genom `sum12 <- unif1+unif2`. Resultatet är 1000 slumptal från $Z_2 = X_1 + X_2$. Använd `hist()` och `qqnorm()` för att undersöka fördelningen hos denna summa
+### Task 1.2
+Simulate 1000 new random numbers from a uniform distribution, $R(0, 1)$, and store them in the variable `unif2`. Then, sum the old and new random numbers using `sum12 <- unif1+unif2`. The result is 1000 random numbers from $Z_2 = X_1 + X_2$. Use `hist()` and `qqnorm()` to investigate the distribution of this sum.
 :::
 
 ```{r}
-# skriv din R-kod här
+# write your R code here
 ```
 
-<!-- ta bort detta och skriv dina slutsatser i enkel text -->
+<!-- remove this and write your conclusions in simple text -->
 
 :::{.callout-note icon=false}
-### Uppgift 1.3
-Skapa även variabler `unif3`, `unif4` och `unif5` på motsvarande sätt och studera fördelningen för $X_1+X_2+\ldots+X_5$.  Verkar det rimligt att ju större $n$ är, desto bättre kan fördelningen för summan anpassas till en normalfördelning?
+### Task 1.3
+Also create variables `unif3`, `unif4`, and `unif5` in a similar way and study the distribution for $X_1+X_2+\ldots+X_5$. Does it seem reasonable that the larger $n$ is, the better the distribution for the sum can be fitted to a normal distribution?
 :::
 
 ```{r}
-# skriv din R-kod här
+# write your R code here
 ```
 
-**Svar**: <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer**: <!-- remove this and write your conclusions in simple text -->
 
 :::{.callout-note icon=false}
-### Uppgift 1.4
-Skapa även variabler `unif3`, `unif4` och `unif5` på motsvarande sätt och studera fördelningen för $X_1+X_2+\ldots+X_5$.  Verkar det rimligt att ju större $n$ är, desto bättre kan fördelningen för summan anpassas till en normalfördelning?
+### Task 1.4
+Create variables `unif3`, `unif4`, and `unif5` in a similar way and study the distribution for $X_1+X_2+\ldots+X_5$. Does it seem reasonable that the larger $n$ is, the better the distribution for the sum can be fitted to a normal distribution?
 :::
 
 ```{r}
-# skriv din R-kod här
+# write your R code here
 ```
 
-**Svar**: <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer**: <!-- remove this and write your conclusions in simple text -->
 
 :::{.callout-note icon=false}
-### Uppgift 1.5
-Pröva vad som händer då du summerar exponentialfördelade slumvariabler med väntevärde 1 (`rexp(1000,1)`).  Hur många variabler behövs summeras innan summan kan approximeras med en normalfördelning?
+### Task 1.5
+Try what happens when you sum exponentially distributed random variables with mean 1 (`rexp(1000,1)`). How many variables need to be summed before the sum can be approximated with a normal distribution?
 :::
 
 ```{r}
-# skriv din R-kod här
+# write your R code here
 ```
 
-**Svar**: <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer**: <!-- remove this and write your conclusions in simple text -->
 
-# CGS i praktiken
+# CLT in Practice
 
-> På 35 patienter med Hodgkins sjukdom mätte man antalet T4 celler i blodet (antal/mm3). Samtidigt mätte man motsvarande antal hos 35 patienter som hade andra sjukdomar (Non-Hodgkins). Data ligger i filen `data/lab2_mini1_filer/Hodgkindata.RData`. Läs in data med `load()`. Du har nu fått två nya variabler Hodgkin och NonHodgkin.
+> In 35 patients with Hodgkin's disease, the number of T4 cells in the blood (number/mm3) was measured. At the same time, the corresponding number was measured in 35 patients with other diseases (Non-Hodgkin). Data are in the file `data/lab2_mini1_files/Hodgkindata.RData`. Load the data with `load()`. You now have two new variables Hodgkin and NonHodgkin.
+
 
 ```{r}
 load("data/lab2_mini1_filer/Hodgkindata.RData")
 ```
 
 :::{.callout-note icon=false}
-### Uppgift 2.1
-Undersök om antalet celler i blodet är normalfördelat för de båda grupperna.
+### Task 2.1
+Investigate whether the number of cells in the blood is normally distributed for both groups.
 :::
 
 ```{r}
-# skriv din R-kod här
+# Write your R code here
 ```
 
-**Svar**: <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer**: <!-- Remove this and write your conclusions in plain text -->
 
 :::{.callout-note icon=false}
-### Uppgift 2.2
-Det kan vara intressant att jämföra grupperna genom att bilda differensen mellan de två gruppmedelvärdena. Använd dig av centrala gränsvärdessatsen för att säga något om vilken fördelning differensen i stickprovsmedelvärden har.
-::: 
+### Task 2.2
+It may be interesting to compare the groups by forming the difference between the two group means. Use the Central Limit Theorem to comment on the distribution of the difference in sample means.
+:::
 
-**Modell**: 
+**Model**:
 
-Låt $\mu_{Hodgkin}$ och $\mu_{NonHodgkin}$ vara väntevärden i de två grupperna.
+Let $\mu_{Hodgkin}$ and $\mu_{NonHodgkin}$ be the means in the two groups.
 
-Låt $\sigma^2_{Hodgkin}$ och $\sigma^2_{NonHodgkin}$ vara varianser i de två grupperna. 
+Let $\sigma^2_{Hodgkin}$ and $\sigma^2_{NonHodgkin}$ be the variances in the two groups.
 
-Vi har två stickprov $(x_1,...,x_{35})$ och $(y_1,...,y_{35})$ från gruppenrna med Hodgkin respektive NonHodgkin. 
+We have two samples $(x_1,...,x_{35})$ and $(y_1,...,y_{35})$ from the groups with Hodgkin's and Non-Hodgkin's diseases, respectively.
 
-Differensen mellan stickprovsmedelvärden är $\delta = \bar{x}- \bar{y}$ och har följande fördelning 
+The difference between sample means is $\delta = \bar{x}- \bar{y}$ and has the following distribution:
 
-$\delta \sim ...$ fyll i beskrivningen!
-
+$\delta \sim ...$ fill in the description!
 
 :::{.callout-note icon=false}
-### Uppgift 2.3
-Skatta parametrarna (väntevärde och varians) i fördelningen för differensen $\delta$. 
+### Task 2.3
+Estimate the parameters (mean and variance) in the distribution of the difference $\delta$.
 :::
 
 ```{r}
-# skriv din R-kod här
+# Write your R code here
 ```
 
-**Svar**: <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer**: <!-- Remove this and write your conclusions in plain text -->
 
 :::{.callout-note icon=false}
-### Uppgift 2.4
-Är det ett stort problem att antal celler i bloder inte är normalfördelad i de båda grupperna från början? Föreställ dig en situtation där det är ett problem och ge ett förslag på hur man kan åtgärda det?
+### Task 2.4
+Is it a significant issue that the number of blood cells is not normally distributed in both groups initially? Imagine a situation where it's a problem and suggest a solution.
 :::
 
-**Svar**: <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer**: <!-- Remove this and write your conclusions in plain text -->
 
-> Kör (Render) denna fil till en html (öppna i webbläsare och skriv ut till PDF) eller en PDF och ladda upp din PDF som en laborationsrapport på Canvas. Forsätt sedan med Miniprojekt I under laboration 2!
+> Run (Render) this file to an HTML (open in a browser and print to PDF) or a PDF and upload your PDF as a lab report on Canvas. Then proceed with Mini Project I during lab 2!

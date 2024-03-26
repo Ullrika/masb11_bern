@@ -1,20 +1,17 @@
 ---
 title: "Regression"
-subtitle: "Datorlaboration 4"
+subtitle: "Computer Lab 4"
 abstract: |
-  Syftet med dagens laboration är att du ska
- 
-  - bekanta dig med lite av de funktioner som finns i R vad det gäller korrelations- och regressionsanalys
-  - arbeta med Miniprojekt II.
+  The purpose of today's lab is for you to:
+
+  - become familiar with functions in R for correlation and regression analysis
+  - work on Mini project II.
 author: 
-  - name: "Skriv ditt namn här"
-    affiliation: "Lunds Universitet"
-date: "`r Sys.Date()`"
+  - name: "Your Name"
+date: today
 toc: true 
 number-sections: true
 highlight-style: pygments
-lang: sv
-language: sv_language.yml
 format: 
   html:
     theme: cosmo
@@ -26,307 +23,302 @@ format:
   docx: default
 ---
 
-## Förberedelseuppgifter {.unnumbered}
+## Preparation Tasks {.unnumbered}
 
-> Du måste ha arbetat ordentligt med de väsentligaste begreppen i kapitlet om regression i kursboken.  Repetera vid behov begreppen *regresionslinje, residualer, konfidensintervall för förväntat värde* samt  *prediktionsintervall*.
+> You must have worked thoroughly with the essential concepts in the chapter on regression in the course book. Repeat the concepts *regression line, residuals, confidence interval for expected value*, and *prediction interval* if necessary.
 
->Du skall ha gjort följande uppgifter *innan* du kommer till laborationen.
+> You should have completed the following tasks *before* you attend the lab.
 
-:::{.callout-warning icon=false}
-### Hemuppgift 1
-Gör uppgift 6.10 i arbetsmaterialet.
+::: {.callout-warning icon="false"}
+### Homework 1
+
+Complete exercise 6.10 in the workbook.
 :::
 
-# Introduktion - regressionsanalys i R {.unnumbered}
+# Introduction - Regression Analysis in R {.unnumbered}
 
-# Längd och ålder hos torskar 
+# Length and Age of Cod Fish
 
-> För 10 torskar har vi värden på variablerna Längd (cm) och Ålder (år).
+> For 10 cod fish, we have values for the variables Length (cm) and Age (years).
 
+| Individual  | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  |
+|-------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| Length (cm) | 15  | 30  | 35  | 50  | 55  | 60  | 58  | 25  | 12  | 43  |
+| Age (år)    | 1   | 2   | 3   | 4   | 5   | 6   | 5   | 2   | 1   | 4   |
 
-| Fisk | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
-|---|---|---|---|---|---|---|---|---|---|---|
-|Längd (cm) | 15 | 30 | 35 | 50 | 55 | 60 | 58 | 25 | 12 | 43|
-|Ålder (år) | 1 | 2 | 3 | 4 | 5 | 6 | 5 | 2 | 1 | 4 |
+::: {.callout-note icon="false"}
+### Task 1.1
 
-:::{.callout-note icon=false}
-### Uppgift 1.1
-Börja med att mata in dessa värden i R.  Lägg in värdena i en tabell (dataframe), som du döper till `torskar`, med värdena i två kolumner: Längd och Ålder. Tänk på att R är känslig för stor och liten bokstav och om man använder ä eller a. Datamaterialet skall alltså innehålla 2 kolumner med 10 värden i varje kolumn.
-:::
-
-```{r}
-torskar <- data.frame(Längd=c(15,30,35,50,55,60,58,25,12,43),
-                      Ålder=c(1,2,3,4,5,6,5,2,1,4))
-torskar
-```
-
-
-:::{.callout-note icon=false}
-### Uppgift 1.2
-Beskriv data. Gör en grafisk beskrivning av sambandet genom att rita ett spridningsdiagram med Ålder på x-axeln och Längd på y-axeln. Ser det ut som det finns ett linjärt samband?
+Start by entering these values into R. Place the values in a table (dataframe), which you name `codfish`, with the values in two columns: Length and Age. Remember that R is case sensitive and sensitive to the use of lower and upper case letters and special characters such as ä or a. Thus, the dataset should contain 2 columns with 10 values in each column.
 :::
 
 ```{r}
-plot(torskar$Ålder, torskar$Längd)
+codfish <- data.frame(Length=c(15,30,35,50,55,60,58,25,12,43),
+                      Age=c(1,2,3,4,5,6,5,2,1,4))
+codfish
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+::: {.callout-note icon="false"}
+### Task 1.2
 
-# Korrelationsanalys av samband mellan längd och ålder hos torskar
-
-> Vi börjar med att undersöka sambandet mellan variablerna med hjälp av korrelationskoefficienten. 
-
-:::{.callout-note icon=false}
-### Uppgift 2.1
-Beräkna korrelationskoefficienten (Pearson) och testa om den är skild från noll. Tyder resultaten på att det finns något linjärt samband mellan Längd och Ålder? 
-:::
-
-**Modell:** Låt $X$ vara längd och $Y$ vara ålder på fiskar. Vi antar att $X$ och $Y$ tillhör en bivariat (2-dimensionell) normalfördelning med korrelation $\rho = \frac{COV(X,Y)}{\sqrt{V(X)\cdot V(Y)}}$. Korrelationen skattas med korrelationskoefficienten, d.v.s. $\hat{\rho}=r$, där $r = \frac{SS_{XY}}{\sqrt{SS_X \cdot SS_Y}}$. 
-
-```{r}
-cor(torskar$Ålder, torskar$Längd)
-```
-
-**Hypoteser:** $H_0: \rho=0$ och $H_1: \rho \neq 0$
-
-Under antagande att normalfördelning gäller kommer teststorheten $t = r\sqrt{\frac{n-2}{1-r^2}}$ vara approximativt normalfördelad. Det går därmed att testa hypotes med ett t-test. Detta test görs med R med rutinen `cor.test`.
-
-```{r}
-cor.test(torskar$Ålder, torskar$Längd)
-```
-
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
-
-# Enkel linjär regression för samband mellan längd och ålder hos torskar
-
-> Vi skall nu undersöka hur sambandet mellan variablerna ser ut genom att anpassa en rät linje till data.  Kommandot `lm(y ~ x)` anpassar en linjär modell för den beroende variabeln `y` som funktion av en eller flera förklarande variabler `x` (lm är förkortning av linear model).  Sedan kan vi få ut olika egenskaper hos modellen och skattningarna med ytterligare kommandon.
-
-```{r}
-modell <- lm(Längd ~ Ålder, data=torskar)
-modell           # skattningarna av parametrarna intercept och lutning på linjen
-summary(modell)  # mer information, t.ex. skattningar och result från test om de är skilda från noll
-confint(modell)  # konfidensintervall för de skattade parametrarna
-```
-
-
-
-:::{.callout-note icon=false}
-### Uppgift 3.1
-Utför regressionsanalysen ovan. Identifiera följande mått i utskriften: 
-
--Förklaringsgrad ($R^2$)
-
--Standardfel för residualer ($s_e$)
-
--Skattningar av koefficienterna $\beta_0$ och $\beta_1$ 
-
--Konfidensintervall för lutningen
-
--p-värde från t-test av nollhypotesen att lutningen är noll
-
-:::
-
-
-<!-- ta bort detta och skriv dina slutsatser i enkel text -->
-
-:::{.callout-note icon=false}
-### Uppgift 3.2
-För att få den skattade regressionslinjen utritad i figuren ni skapade tidigare kan du använda kommandot
+Describe the data. Make a graphical description of the relationship by plotting a scatter plot with Age on the x-axis and Length on the y-axis. Does it appear that there is a linear relationship?
 :::
 
 ```{r}
-plot(torskar$Ålder, torskar$Längd)
-abline(modell)
+plot(codfish$Age, codfish$Length)
 ```
 
-<!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- Remove this and write your conclusions in plain text -->
 
+# Correlation analysis of the relationship between length and age in codfish
 
-## Kontroll av förutsättningar {.unnumbered}
+> We begin by examining the relationship between the variables using the correlation coefficient.
 
->Vi skall nu kontrollera tre av de antagande som finns i analysen, nämligen (1) residualer är obereonde, (2) normalfördelade och (3) har lika varians. Antagandet om oberoende bedöms genom att ta reda på hur data är insamlat. I detta fall vet vi inte så mycket, förutom att mätningarna är gjorda på olika individer fiskade under en dag. Vi finner ingen anledning att inte anta oberoende, och undersöker de två återstående antaganden genom att studera residualerna. Residualerna i den anpassade modellen beräknas med kommandot 
+::: {.callout-note icon="false"}
+### Task 2.1
+
+Calculate the correlation coefficient (Pearson) and test if it is different from zero. Do the results indicate that there is a linear relationship between Length and Age?
+:::
+
+**Model:** Let $X$ be the length and $Y$ be the age of fish. We assume that $X$ and $Y$ belong to a bivariate (2-dimensional) normal distribution with correlation $\rho = \frac{COV(X,Y)}{\sqrt{V(X)\cdot V(Y)}}$. The correlation is estimated by the correlation coefficient, i.e., $\hat{\rho}=r$, where $r = \frac{SS_{XY}}{\sqrt{SS_X \cdot SS_Y}}$.
 
 ```{r}
-res <- residuals(modell)
+cor(codfish$Age, codfish$Length)
+```
+
+**Hypoteses:** $H_0: \rho=0$ and $H_1: \rho \neq 0$
+
+Assuming a normal distribution holds, the test statistic $t = r\sqrt{\frac{n-2}{1-r^2}}$ will be approximately normally distributed. Thus, it is possible to test hypotheses using a t-test. This test is performed in R using the `cor.test` routine.
+
+```{r}
+cor.test(codfish$Age, codfish$Length)
+```
+
+**Answer:** <!-- Remove this and write your conclusions in plain text -->
+
+# Simple linear regression for the relationship between length and age of codfish
+
+> We will now examine how the relationship between the variables looks by fitting a straight line to the data. The command `lm(y ~ x)` fits a linear model for the dependent variable `y` as a function of one or more explanatory variables `x` (lm is short for linear model). Then, we can obtain various properties of the model and estimates using additional commands.
+
+```{r}
+model <- lm(Length ~ Age, data=codfish)
+model           # estimates of the parameters intercept and slope
+summary(model)  # more information, e.g. estimation errors and test if the slope is zero
+confint(model)  # confidence interval for the estimated parameters
+```
+
+Perform the regression analysis above. Identify the following measures in the output:
+
+- Coefficient of determination ($R^2$)
+- Standard error of residuals ($s_e$)
+- Estimates of the coefficients $\beta_0$ and $\beta_1$
+- Confidence interval for the slope
+- p-value from the t-test of the null hypothesis that the slope is zero
+
+:::
+
+<!-- Remove this and write your conclusions in plain text -->
+
+::: {.callout-note icon="false"}
+### Task 3.2
+
+To plot the estimated regression line in the figure you created earlier, you can use the command
+:::
+
+```{r}
+plot(Length ~ Age, data=codfish)
+abline(model)
+```
+
+
+## Assumption Checking {.unnumbered}
+
+> We will now check three of the assumptions in the analysis, namely (1) residuals are independent, (2) normally distributed, and (3) have equal variance. The assumption of independence is assessed by understanding how the data was collected. In this case, we don't have much information, except that the measurements were taken on different individuals caught in a day. We find no reason to assume dependence, and we examine the remaining assumptions by studying the residuals. The residuals in the fitted model are computed with the command"
+
+```{r}
+res <- residuals(model)
 res
 ```
 
-:::{.callout-note icon=false}
-### Uppgift 3.3
-Undersök om residualerna har lika varianser (d.v.s. konstant spridning kring linjen) genom att plotta residualerna mot x-variablen Ålder. Verkar antagandet stämma? 
+::: {.callout-note icon="false"}
+### Task 3.3
+
+Examine whether the residuals have equal variances (i.e., constant spread around the line) by plotting the residuals against the x-variable Age. Does the assumption seem to hold?
 :::
 
 ```{r}
-plot(torskar$Ålder, res)
+plot(codfish$Age, res)
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- Remove this and write your conclusions in plain text -->
 
+::: {.callout-note icon="false"}
+### Task 3.4
 
-:::{.callout-note icon=false}
-### Uppgift 3.4
-Undersök om residualerna är normalfördelade genom att göra en Q-Q-plot med funktionen `qqnorm`. 
+Examine if the residuals are normally distributed by creating a Q-Q plot using the function `qqnorm`.
 
-Verkar antagandet om normalfördelning vara uppfyllt?
+Does the assumption of normality seem to be met?
 :::
 
 ```{r}
-# skriv din R-kod här
+# wrtie your R code here
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- Remove this and write your conclusions in plain text -->
 
-## Prognoser och konfidensintervall {.unnumbered}
+## Predictions and confidence intervals {.unnumbered}
 
-> En regressionsmodell kan användas för att göra prognos eller prediktion av det förväntade värdet eller det enskilda värdet av $y$ givet $x=x_0$. I formellsamlingen har vi följande formler för konfdensintervall (se formelsamlingen för förklaring av alla symboler).
+> A regression model can be used to forecast or predict the expected value or the individual value of $y$ given $x=x_0$. In the formula collection, we have the following formulas for confidence intervals (refer to the formula collection for explanations of all symbols).
 
-**Konfidensintervall för förväntat värde:**  $$I_{\mu(x_0)}: b_0+b_1x_0 \pm t_{1-\alpha/2,n-2}\sqrt{s^2_e(\frac{1}{n}+\frac{(x_0-\bar{x})^2}{SS_x})}$$ 
+**Confidence interval of the expected value:** $$I_{\mu(x_0)}: b_0+b_1x_0 \pm t_{1-\alpha/2,n-2}\sqrt{s^2_e(\frac{1}{n}+\frac{(x_0-\bar{x})^2}{SS_x})}$$
 
+**Confidence interval of the next value (also known as prediction interval):** $$I_{y(x_0)}: b_0+b_1x_0 \pm t_{1-\alpha/2,n-2}\sqrt{s^2_e(1+\frac{1}{n}+\frac{(x_0-\bar{x})^2}{SS_x})}$$
 
-**Konfidensintervall för enskilt värde (även kallat prediktionsintervall):**  $$I_{y(x_0)}: b_0+b_1x_0 \pm t_{1-\alpha/2,n-2}\sqrt{s^2_e(1+\frac{1}{n}+\frac{(x_0-\bar{x})^2}{SS_x})}$$ 
+::: {.callout-note icon="false"}
+### Task 3.5
 
-:::{.callout-note icon=false}
-### Uppgift 3.5
-Rita prediktioner av längd givet ålder med konfidensintervall för förväntade värden och för enskilda värden (prediktionsintervall). Först använder vi modellen för att göra prediktioner för olika värden på ålder.
+Draw predictions of length given age with confidence intervals for expected values and for individual values (prediction intervals). First, we use the model to make predictions for different values of age.
 
-För att få intervallen utritade i figur ritar vi linjer med åldrer på x-axeln och tillhörande intervallgränser på y-axeln.  För att skilja på intervallen ritar vi konfidensintervallet med streckade blå linjer och prediktionsintervallet med prickade röda linjer.
+To plot the intervals in the figure, we draw lines with age on the x-axis and corresponding interval limits on the y-axis. To distinguish between the intervals, we draw the confidence interval with dashed blue lines and the prediction interval with dotted red lines.
 
-Varför är prediktionsintervallet (det blåa) bredare än konfidentsintervallet för det förväntade värdet (det röda)?
+Why is the prediction interval (the blue one) wider than the confidence interval for the expected value (the red one)?
 :::
 
 ```{r}
-# Gör prediktioner för en ålderssekvens i steg om halvår:
+# Do predictions for a sequence of ages with steps of half years:
 # 0.5, 1.0, 1.5, …, 7.0, 7.5:
-x0 <- data.frame(Ålder=seq(0.5,7.5,0.5))
-mu0konf <- predict(modell, x0, interval="confidence")  # konfidensintervall
-y0pred <- predict(modell, x0, interval="prediction")  # prediktionsintervall
+x0 <- data.frame(Age=seq(0.5,7.5,0.5))
+mu0conf <- predict(model, x0, interval="confidence")  # confidence interval
+y0pred <- predict(model, x0, interval="prediction")  # prediction interval
 
 
-plot(torskar$Ålder, torskar$Längd)
-lines(x0$Ålder, mu0konf[,"lwr"], col="blue", lty=2) # undre (lower) gränsen
-lines(x0$Ålder, mu0konf[,"upr"], col="blue", lty=2) # övre (upper) gränsen
-lines(x0$Ålder, y0pred[,"lwr"], col="red", lty=3)
-lines(x0$Ålder, y0pred[,"upr"], col="red", lty=3)
+plot(Length ~ Age, data=codfish)
+lines(x0$Age, mu0conf[,"lwr"], col="blue", lty=2) # lower limit
+lines(x0$Age, mu0conf[,"upr"], col="blue", lty=2) # upper limit
+lines(x0$Age, y0pred[,"lwr"], col="red", lty=3)
+lines(x0$Age, y0pred[,"upr"], col="red", lty=3)
 ```
 
-**Svar**: <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- Remove this and write your conclusions in plain text -->
 
+::: {.callout-note icon="false"}
+### Task3.6
 
-:::{.callout-note icon=false}
-### Uppgift 3.6
-Vilken längd förväntas en sju år gammal torsk ha? Ange med konfidensintervall!. 
+What length is a seven year old codfish expected to have? Provide with confidence interval!.
 :::
 
 ```{r}
-# skriv in din R-kod här
+# write your R code here
 ```
 
+**Answer:** <!-- Remove this and write your conclusions in simple text -->
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+# Regression Analysis of the Relationship between Concentration and Absorbance
 
+In the lab "Protein Determination According to the Bradford Method" in the cell biology course, absorbance was investigated for samples with different dilutions of Bovine Serum Albumin (BSA) standard. Samples with 0-10 µg of protein were diluted to 100 µl with water, and two samples were prepared per concentration.
 
-# Regressionsanalys av samband mellan koncentration och absorbans
+Data for one lab group is available in the file `data/lab4_filer/Labbdata.RData`.
 
-I laborationen "Proteinbestämning enligt Bradford-metoden" i kursen cellbiologi undersöktes absorbansen hos prov med olika spädningar av Bovint Serum Albumin (BSA)-standard.  Prov med 0--10 $\mu$g protein spädes till 100 $\mu$l med vatten och två prover förberedes per koncentration.
-
-Data för en laborationsgrupp finns i filen `data/lab4_filer/Labbdata.RData`.
-
-**Modell**: Enligt Lambert-Beers lag gäller att absorbansen (A) kan beskrivas som en linjär funktion av koncentrationen (c): $A=k\cdot c$ där konstanten $k$ beror på ämnets molära absorptionskoefficient vid en viss våglängd samt kyvettens längd.  Vid mätningar får man naturligtvis räkna med en viss slumpmässig variation, en rimlig modell är att absorbansen vid mätning nr $i$, $A_i$, beskrivs linjärt av koncentrationen ci plus ett slumpmässigt fel:
+**Model:** According to the Lambert-Beer's law, absorbance (A) can be described as a linear function of concentration (c): $A=k\cdot c$, where the constant $k$ depends on the substance's molar absorption coefficient at a specific wavelength and the cuvette's length. During measurements, one naturally expects some random variation. A reasonable model is that the absorbance at measurement number $i$, $A_i$, is linearly described by the concentration $c_i$ plus a random error:
 
 $$A_i = \beta_0 + \beta_1 \cdot c_i + \epsilon_i$$
 
-där $\epsilon_i$ är oberoende och normalfördelad slumpfel med väntevärde 0 och standardavvikelse $\sigma$.  Här motsvaras konstanten $\beta_1$ av den tidigare $k$ medan $\beta_0$ är absorbansen i den lösning som BSA:n är löst.
+where $\epsilon_i$ is independent and normal distributed random errors with expected value 0 and standard deviation $\sigma$. Here $\beta_0$ is the true absorbance in the solution and $\beta_1$ corresponds to k in the equation. 
 
-:::{.callout-note icon=false}
-### Uppgift 4.1
-Undersök baserat på data från laborationen om den linjära regressionsmodellen ovan är rimlig att anpassa.
+::: {.callout-note icon="false"}
+### Task 4.1
+
+Examine based on data from the lab whether the linear regression model above is reasonable to fit.
 :::
 
 ```{r}
 load("data/lab4_filer/Labbdata.RData")
-modell2 <- lm(absorbans ~ koncentration, data=Labbdata)
+model2 <- lm(absorbans ~ koncentration, data=Labbdata)
 ```
 
 ```{r}
-# skriv in din R-kod här
+# write your R code here
 ```
 
-**Svar:**  <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- Remove this and write your conclusions in simple text -->
 
-:::{.callout-note icon=false}
-### Uppgift 4.2
-Hur mycket ökar absorbansen då man ökar koncentrationen en enhet? Ange ett 95 % konfidensintervall för denna storhet.
+::: {.callout-note icon="false"}
+### Task 4.2
+
+How much does the absorbance increase when the concentration increase one unit? Provide a 95 % confidence interval for this quantity.
 :::
 
-**Svar:**  <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- Remove this and write your conclusions in simple text -->
 
-:::{.callout-note icon=false}
-### Uppgift 4.3
-Vad är den förväntade absorbansen för ett prov med koncentration 50 (mg/l). Ange ett 95 % konfidensintervall för denna storhet.  Skapa först en dataframe där värdet för koncentrationen läggs in.
+::: {.callout-note icon="false"}
+### Task 4.3
+
+What is the expected absorbance for a sample with concentration 50 (mg/l). Provide a 95 % confidence interval for this quantity. To do this, create a data frame where the value for the concentration is specified.
 :::
 
 ```{r}
 x50 <- data.frame(koncentration=c(50))
-mu50konf <- predict(modell2, x50,interval="confidence")
+mu50conf <- predict(model2, x50,interval="confidence")
 ```
 
 ```{r}
-# Skriv din R-kod här
+# write your R code here
 ```
 
-**Svar:**  <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- Remove this and write your conclusions in simple text -->
 
-:::{.callout-note icon=false}
-### Uppgift 4.4
-Vi har ett prov med koncentration 50 (mg/l).  Ange ett 95 %-igt prediktionsintervall för absorbansen i just detta prov.
+::: {.callout-note icon="false"}
+### Task 4.4
+
+Vi har ett prov med koncentration 50 (mg/l). Ange ett 95 %-igt prediktionsintervall för absorbansen i just detta prov.
 :::
 
 ```{r}
-# Skriv din R-kod här
+# write your R code here
 ```
 
-**Svar:**  <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- Remove this and write your conclusions in simple text -->
 
-:::{.callout-note icon=false}
-### Uppgift 4.5
-Huvudsyftet med mätningarna var att erhålla en standardkurva för hur absorbansen  påverkas av koncentrationen.  Anta att vi på ett prov med okänd koncentration $c_0$ uppmätte en absorbans på 0.43.  Vilken koncentration kan det svara mot.
+::: {.callout-note icon="false"}
+### Task 4.5
 
-Skatta koncentrationen utifrån kännedom av absorbansen. En skattning av $c_0$ kan vi få fram genom att lösa ut $x$ ur sambandet $0.43 = \beta_0 + \beta_1\cdot x$ så här (om den anpassade modellen sparats i variabeln `modell2`).  Vad blev den skattade koncentrationen?
+Huvudsyftet med mätningarna var att erhålla en standardkurva för hur absorbansen påverkas av koncentrationen. Anta att vi på ett prov med okänd koncentration $c_0$ uppmätte en absorbans på 0.43. Vilken koncentration kan det svara mot.
+
+Skatta koncentrationen utifrån kännedom av absorbansen. En skattning av $c_0$ kan vi få fram genom att lösa ut $x$ ur sambandet $0.43 = \beta_0 + \beta_1\cdot x$ så här (om den anpassade modellen sparats i variabeln `model2`). Vad blev den skattade koncentrationen?
 :::
 
 ```{r}
-beta0 <- modell2$coefficients[1]
-beta1 <- modell2$coefficients[2]
+beta0 <- model2$coefficients[1]
+beta1 <- model2$coefficients[2]
 c0 <- (0.43 - beta0) / beta1
 c0
 ```
 
-**Svar:**  <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- Remove this and write your conclusions in simple text -->
 
-## Fortsätt med att göra klart Miniprojekt II, se laboration 3 {.unnnumbered}
-**Några svar**:  
-  2.1. Ja! $r = 0.9828, t=15.071$; p-värde=0.000 - Man kan förkasta hypotesen om inget samband  
-  3.1. $R^2=0.966$; $s_e = 3.443$; $\hat{\beta_0}=b_0=5.993$; $\hat{\beta_1}=b_1=9.790$; $I_{\beta_1}=(8.29, 11.29)$; $p=3.72\cdot 10^{-7}$  
-  3.6. Förväntad längd vid åldern 7 år är 74.52; konfidensintervall är $(68.43,\,80.61)$  
-  4.1. Normalfördelat: Njä; Konstant varians: Ej helt lätt att bedöma (för få värden)  
-  4.2. $0.0008$  intervall: $(0.00063,\,0.0011)$  
-  4.3. konfidensintervall: $(0.425,\,0.441)$  
-  4.4. prediktionsintervall: $(0.407,\,0.459)$  
-  4.5. $c_0$ skattas till $46.6$ mg/l  
-  
+## Continue working on Mini project II, see laboration 3 {.unnnumbered}
 
-## Sammanfattning R {.unnumbered}
+**Some answers**:\
+2.1. Yes! $r = 0.9828, t=15.071$; p-värde=0.000 - you can reject the hypothesis that there is no linear association\
+3.1. $R^2=0.966$; $s_e = 3.443$; $\hat{\beta_0}=b_0=5.993$; $\hat{\beta_1}=b_1=9.790$; $I_{\beta_1}=(8.29, 11.29)$; $p=3.72\cdot 10^{-7}$\
+3.6. Expected length at age 7 is 74.52; Confidence interval $(68.43,\,80.61)$\
+4.1. Normal distributed?: difficult to tell; Constant variance?: not easy to judge (too few values)\
+4.2. $0.0008$ interval: $(0.00063,\,0.0011)$\
+4.3. confidence interval: $(0.425,\,0.441)$\
+4.4. prediction interval: $(0.407,\,0.459)$\
+4.5. $c_0$ is estimated to be $46.6$ mg/l
 
-```r
-cor(x, y)                       #Korrelationskoefficient
-cor.test(x, y)                  #Test för korrelationskoefficient
-lm(y ~ x)                       #Regression av y som funktion av x
-lm(y ~ x, data=dataframen)	# dataframen som innehåller x och y ... i ett visst datamaterial
-summary(modell)                 #Skattningar, signifikanser, etc,
-confint(modell)                # Konfidensintervall för parametrarna
-predict(modell, x0)            # Prediction av förväntat värde när x=x0
-predict(modell, x0, interval="confidence")		#… med konfidensintervall
-predict(modell, x0, interval="prediction")		#… med prediktionsintervall
-residuals(modell)               #Residualer
+## Summary of R functions {.unnumbered}
+
+``` r
+cor(x, y)                     #Correlation coefficient
+cor.test(x, y)                #Test for correlation coefficient
+lm(y ~ x)                     #Regression of y as a function of x
+lm(y ~ x, data)               #Data = dataframe containing x and y 
+summary(model)                #Estimates, p-values, etcs
+confint(model)                #Confidence interval for parameters
+predict(model, x0)            #Prediction of an expected value when x=x0
+predict(model, x0, interval="confidence")      #… with a confidence interval
+predict(model, x0, interval="prediction")      #… with a prediction interval
+residuals(model)               #Residuals
 ```
-

@@ -1,24 +1,20 @@
 ---
-title: "Statistiska test"
-subtitle: "Datorlaboration 3"
+title: "Statistical Tests"
+subtitle: "Computer Lab 3"
 abstract: |
-  Syftet med dagens laboration är att du ska
- 
-  -  träna på de grundläggande begreppen inom hypotesprövning
-  (t.ex. signifikansnivå och styrka) samt vilka slutsatser man kan
-  dra från analysen 
-  - bekanta dig med lite av de funktioner som finns i R vad det
-  gäller olika grundläggande statistiska test
-  - arbeta med kursens Miniprojekt II.
+  The purpose of today's lab is for you to:
+
+  - practice the basic concepts of hypothesis testing
+  (e.g., significance level and power) and what conclusions can
+  be drawn from the analysis
+  - familiarize yourself with some of the functions available in R regarding various basic statistical tests
+  - work on the course's Mini Project II.
 author: 
-  - name: "Skriv ditt namn här"
-    affiliation: "Lunds Universitet"
-date: "`r Sys.Date()`"
+  - name: "Your Name"
+date: today
 toc: true
 number-sections: true
 highlight-style: pygments
-lang: sv
-language: sv_language.yml # detta kommer att gör till att all text är på Svenska
 format: 
   html:
     theme: cosmo
@@ -30,114 +26,114 @@ format:
   docx: default
 ---
 
-## Förberedelseuppgifter {.unnumbered}
+## Preparation Tasks {.unnumbered}
 
-> Repetera begreppen *hypoteser, signifikansnivå, styrkefunktion* samt *modell med matchade data och modell med två oberoende stickprov*.
+> Review the concepts of *hypotheses, significance level, power function,* and *model with matched data and model with two independent samples*.
 >
->Du skall ha gjort följande uppgifter *innan* du kommer till laborationen.
+> You should have completed the following tasks *before* you come to the lab.
 
 :::{.callout-warning icon=false}
-### Hemuppgift 1
-För att träna på de grundläggande begreppen i hypotest gör uppgifterna **Dig:4.4.1(felrisker)\_3, \_4 och \_5 på övning 7**.
+### Homework 1
+To practice the basic concepts in hypothesis testing, complete exercises **Dig:4.4.1(error rates)\_3, \_4, and \_5 in exercise 7**.
 :::
 
 :::{.callout-warning icon=false}
-### Hemuppgift 2
-För att träna på olika modeller gör **Dig:5.2\_1 och \_2**.
+### Homework 2
+To practice different models, do **Dig:5.2\_1 and \_2**.
 :::
 
 :::{.callout-warning icon=false}
-### Innan du sätter igång
-Ladda in R-funktioner som behövs för laborationen. Dessa funktioner kommer från R-paketet Räkna med variation, men för att undvika problem med installation har vi plockat ut de ni använder och sparat i en fil. Du "berättar" för R att dessa funktioner finns genom att köra följande kod:
+### Before You Start
+Load R functions needed for the lab. These functions come from the R package **Räkna med variation**, but to avoid installation problems, we have extracted the ones you will use and saved them in a file. You "inform" R that these functions exist by running the following code:
 
 ```{r}
 #| message: false
 source("kod/funktioner_raknamedvariation_light.R")
 ```
 :::
-# Grundläggande begrepp vid hypotestestning
+# Basic Concepts in Hypothesis Testing
 
-> Läkemedel kan ge en nedsatt salivkörtelfunktion, vilket är en riskfaktor för karies och andra sjukdomar i munhålan.  På 7 slumpmässigt utvalda patienter som alla fick samma medicin mätte man under 5 minuter den så kallade tuggstimulerade saliven.  Normal mängd saliv under dessa förhållanden är 1 ml/min och muntorrhet anses föreligga när mängden saliv understiger 0.7 ml/min.  Som modell antog man att salivmängden är normalfördelad med väntevärde $\mu$ och standardavvikelse $\sigma$, där $\sigma$ anses vara 0.5 ml/min. Intressanta frågeställningar är t.ex.:
+> Medication can reduce salivary gland function, which is a risk factor for cavities and other oral diseases. Saliva stimulated by chewing was measured for 5 minutes in 7 randomly selected patients, all receiving the same medication. The normal saliva amount under these conditions is 1 ml/min, and dry mouth is considered when the saliva amount is below 0.7 ml/min. The model assumed that the saliva amount is normally distributed with mean $\mu$ and standard deviation $\sigma$, where $\sigma$ is considered to be 0.5 ml/min. Interesting questions include:
 > 
-> - Stöder data vår misstanke att medicinen sänker  salivproduktionen? 
-> - Om medicinen ger upphov till en genomsnittlig salivproduktion på 0.8 ml/min, hur troligt är det att vi kommer att missa den nedsatta salivproduktionen med vårt test?
-> - Hur många patienter ska vi mäta på om vi vill att testet ska   upptäcka en nedsatt salivproduktion på 0.7\,ml/min med sannolikheten  0.95? 
+> - Do the data support our suspicion that the medication lowers saliva production?
+> - If the medication results in an average saliva production of 0.8 ml/min, how likely are we to miss the reduced saliva production with our test?
+> - How many patients should we measure if we want the test to detect reduced saliva production at 0.7 ml/min with a probability of 0.95? 
 >
-> På kursens hemsida hittar ni data i filen `saliv.RData`. Kortfattade svar till frågorna som ställs i uppgifterna finns i slutet på denna del av handledningen.
+> On the course website, you will find data in the file `salivary.RData`. Concise answers to the questions posed in the tasks are provided at the end of this part of the guide.
 
 :::{.callout-note icon=false}
-### Uppgift 1.1
-Först vill man undersöka om data från de 7 patienterna stöder vår misstanke att medicinen sänker salivproduktionen.  Ställ upp modell och lämpliga hypoteser.
+### Task 1.1
+First, we want to investigate if the data from the 7 patients support our suspicion that the medication lowers saliva production. Set up a model and appropriate hypotheses.
 :::
 
-**Modell**: <!-- ta bort detta och ange modell här  -->
+**Model**: <!-- Remove this and specify the model here  -->
 
-**Hypoteser**: <!-- ta bort detta och ange hypoteser här  -->
+**Hypotheses**: <!-- Remove this and specify the hypotheses here  -->
 
 :::{.callout-note icon=false}
-### Uppgift 1.2
-Beräkna medelvärdet av mätningarna.
+### Task 1.2
+Calculate the mean of the measurements.
 :::
 
 ```{r}
-# skriv din R-kod här
+# Write your R code here
 ```
 
-**Svar**: <!-- ta bort detta och skriv upp medelvärdet för stickprovet -->
+**Answer**: <!-- Remove this and write down the mean of the sample -->
 
 :::{.callout-note icon=false}
-### Uppgift 1.3
-Använd rutinen `hypotes` för att illustrera testets kritiska område då testet utförs på signifikansnivå $\alpha = 0.05$.  Det aktuella kommandot är `hypotes(`$\sigma$, $n$, $\mu_0$, $\alpha$, `H1-riktn)`. Med hypoteserna $H_0: \mu = 1$ och $H_1: \mu < 1$ blir kommandot `hypotes(0.5, 7, 1, 0.05, '<')`. Använd rutinen fast med de hypoteser du har formulerat. (Bortse från de felmeddelanden som eventuellt kommer och titta på figuren.)
+### Task 1.3
+Use the routine `hypotes` to illustrate the test's critical region when the test is performed at a significance level of $\alpha = 0.05$. The relevant command is `hypotes(`$\sigma$, $n$, $\mu_0$, $\alpha$, `H1-direction)`. With hypotheses $H_0: \mu = 1$ and $H_1: \mu < 1$, the command becomes `hypotes(0.5, 7, 1, 0.05, '<')`. Use the routine with the hypotheses you have formulated. (Ignore any error messages that may occur and look at the figure.)
 :::
 
 ```{r}
-# skriv din R-kod här
-```
-
-
-:::{.callout-note icon=false}
-### Uppgift 1.4
-Rutinen markerar det kritiska området och anger ett värde $k$
-som är gränsen till området. Hur har $k$ beräknats? Ställ upp den matematiska formeln för $k$ och använd den för att själv beräkna $k$.
-:::
-
-**Ekvation för $k$**: <!-- ta bort detta och skriv uttrycket -->
-
-**Egen beräkning av $k$**:
-```{r}
-# skriv din R-kod här
+# Write your R code here
 ```
 
 
 :::{.callout-note icon=false}
-### Uppgift 1.5
-Använd ditt beräknade stickprovsmedelvärde för att utföra testet. Vad är din slutsats om nollhypotesen, $H_0$?
+### Task 1.4
+The routine marks the critical region and provides a value $k$
+which is the boundary of the region. How has $k$ been calculated? Set up the mathematical formula for $k$ and use it to calculate $k$ yourself.
 :::
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Equation for $k$**: <!-- Remove this and write the expression -->
+
+**Own calculation of $k$**:
+```{r}
+# Write your R code here
+```
 
 
 :::{.callout-note icon=false}
-### Uppgift 1.6
-Vad är din konkreta tolkning av signifikansnivån $\alpha = 0.05$ i detta exempel?
+### Task 1.5
+
+Use your calculated sample mean to conduct the test. What is your conclusion about the null hypothesis, $H_0$?
 :::
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- remove this and write your conclusions in plain text -->
 
 :::{.callout-note icon=false}
-### Uppgift 1.7
-Undersök hur det kritiska område ändras då du ändrar signifikansnivån till $\alpha = 0.01$.  Vad är din slutsats nu?
+### Task 1.6
+What is your concrete interpretation of the significance level $\alpha = 0.05$ in this example?
+:::
+
+**Answer:** <!-- remove this and write your conclusions in plain text -->
+
+:::{.callout-note icon=false}
+### Task 1.7
+Examine how the critical region changes when you change the significance level to $\alpha = 0.01$. What is your conclusion now?
 :::
 
 ```{r}
-# skriv din R-kod här
+# write your R code here
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- remove this and write your conclusions in plain text -->
 
-# Testets styrka och styrkefunktion
+# Test Power and Power Function
 
-> Antag nu att genomsnittlig salivutsöndring i riskgruppen är 0.8.  Då är förstås $H_0: \mu = 1$ falsk och vi vill att vårt test ska upptäcka detta och förkasta denna hypotes till förmån för hypotesen $H_1: \mu < 1$.  Sannolikheten att testet verkligen klarar av detta kallas för testets styrka i punkten 0.8.  Använd rutinen `hypotes`  för att illustrera testets styrka i punkten 0.8.  Kommandot är nu `hypotes(`$\sigma$, $n$, $\mu_0$, $\alpha$, H1-riktn, sant $\mu$`)`, så i detta fall skriver du `hypotes(0.5, 7, 1, 0.05, '<', 0.8)`.
+> Now assume that the average saliva secretion in the risk group is 0.8. Then, of course, $H_0: \mu = 1$ is false, and we want our test to detect this and reject this hypothesis in favor of the hypothesis $H_1: \mu < 1$. The probability that the test actually accomplishes this is called the test power at the point 0.8. Use the routine `hypotes` to illustrate the test power at the point 0.8. The command now is `hypotes(`$\sigma$, $n$, $\mu_0$, $\alpha$, H1-direction, true $\mu$`), so in this case, you write `hypotes(0.5, 7, 1, 0.05, '<', 0.8)`.
 
 ```{r}
 #| fig-width: 7
@@ -147,18 +143,19 @@ hypotes(0.5, 7, 1, 0.05, '<', 0.8)
 ```
 
 :::{.callout-note icon=false}
-### Uppgift 2.1
-Rutinen ger dig ytterligare en figur som, förutom signifikansnivån  $\alpha$ (felrisk av typ I), även visar $\beta$ (felrisk av typ II). Vad är den konkreta tolkningen av $\beta$ i detta exempel?  Hur hänger $\beta$ ihop med testets styrka?
 
-Generellt är testets styrka i punkten $\mu$ sannolikheten att nollhypotesen förkastas om $\mu$ är verklig genomsnittlig salivutsöndring i riskgruppen, d.v.s.
+### Task 2.1
+The routine gives you another figure which, besides the significance level $\alpha$ (type I error risk), also shows $\beta$ (type II error risk). What is the concrete interpretation of $\beta$ in this example? How does $\beta$ relate to the test power?
+
+Generally, the test power at the point $\mu$ is the probability that the null hypothesis is rejected given that $\mu$ is the true average saliva secretion in the risk group, i.e.,
 
 $$
-S(\mu)=P(\text{$H_0$ förkastas|$\mu$})
+S(\mu)=P(\text{reject } H_0 | \mu)
 $$
 
-Observera att styrkan beror på värdet $\mu$. I detta exempel gäller att ju mindre $\mu$ är i förhållande till $\mu_0= 1$ desto större är chansen att testet ska upptäcka att $H_0$ inte gäller. Därför  är det intressant att studera styrkan som en funktion av $\mu$, denna funktion betecknas ofta $S(\mu)$.
+Note that the power depends on the value of $\mu$. In this example, the smaller $\mu$ is relative to $\mu_0= 1$, the greater the chance that the test will detect that $H_0$ is not true. Therefore, it is interesting to study the power as a function of $\mu$, and this function is often denoted $S(\mu)$.
 
-Rutinen \texttt{styrkefkn} ritar upp styrkefunktionen, kommandot är \texttt{styrkefkn($\sigma$, $n$,   $\mu_0$, $\alpha$, H1-riktn, sant $\mu$)} om du vill rita upp funktionen och markera ett speciellt $\mu$-värde.  Använd alltså kommandot `styrka(0.5, 7, 1, 0.05, '<', 0.8)`, vilket ger dig den tidigare figuren plus styrkan som en funktion av $\mu$.
+The routine \texttt{styrkefkn} draws the power function. The command is \texttt{styrkefkn($\sigma$, $n$,   $\mu_0$, $\alpha$, H1-direction, true $\mu$)} if you want to draw the function and mark a specific $\mu$ value. So, you use the command `styrka(0.5, 7, 1, 0.05, '<', 0.8)`, which gives you the previous figure plus the power as a function of $\mu$.
 :::
 
 ```{r}
@@ -168,74 +165,73 @@ Rutinen \texttt{styrkefkn} ritar upp styrkefunktionen, kommandot är \texttt{sty
 styrka(0.5, 7, 1, 0.05, '<', 0.8)
 ```
 
-<!-- ta bort detta och skriv dina slutsatser i enkel text -->
+<!-- remove this and write your conclusions in plain text -->
 
 :::{.callout-note icon=false}
-### Uppgift 2.2
-Uppskatta utifrån styrkefunktionen hur stor sannolikheten är att vi
-med vårt test kommer  upptäcka att en grupp som bör klassas som
-muntorra ($\mu= 0.7$) har en sänkt salivproduktion.
+### Task 2.2
+Based on the power function, estimate the probability that with our test, we will detect that a group that should be classified as having dry mouth ($\mu= 0.7$) has reduced saliva production.
 :::
 
 ```{r}
-# skriv din R-kod här
+# write your R code here
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- remove this and write your conclusions in plain text -->
 
 :::{.callout-note icon=false}
-### Uppgift 2.3
-Hur många patienter bör vi mäta på om vi med sannolikheten 0.95 verkligen ska upptäcka att muntorra har en sänkt salivproduktion? Tips: Testa med olika värden på $n$ i `styrkefkn`.
+### Task 2.3
+How many patients should we measure if we want to have a 0.95 probability of detecting that individuals with dry mouth have reduced saliva production? Hint: Try different values of $n$ in `styrkefkn`.
 :::
 
 ```{r}
-# skriv din R-kod här
+# write your R code here
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- remove this and write your conclusions in plain text -->
 
+## Answer to the example with dry mouth {.unnumbered}
 
-## Svar till exemplet med muntorrhet {.unnumbered}
-
- 1. Del 1  
+ 1. Part 1  
   1.1 $H_0: \mu = 1$;  $H_1: \mu < 1$  
   1.2 $k=\mu_0 - z_{1-\alpha}\, \frac{\sigma}{\sqrt{n}} =  1-1.6445 \cdot \frac{0.05}{\sqrt{7}}=0.689$  
-  1.5 Eftersom medelvärdet $< 0.689$ förkastas $H_0$ på nivå 0.05  
-  1.6 Det finns en chans på 5% att vi påstår att en person i riskgruppen har en sänkt salivproduktion när den i själva verket är normal
-  1.7 $H_0$ kan ej förkastas på nivå 0.01
- 2. Del 2  
-  2.1 $\beta = P(\text{ej förkasta} H_0|\mu)$, d.v.s. $\beta$ när det sanna väntevärdet är 0.8 är 1-strykan i punkten 0.8 = 1- S(0.8)  
-  2.2 Styrkan i punkten 0.7, S(0.7), kan enligt figuren uppskattas till 0.48  
-  2.3 Det krävs $n=30$ patienter för att styrkan ska vara 0.95 i   punkten 0.7  
+  1.5 Since the mean is $< 0.689$, $H_0$ is rejected at the 0.05 level  
+  1.6 There is a 5% chance that we claim a person in the risk group has reduced saliva production when it is actually normal
+  1.7 $H_0$ cannot be rejected at the 0.01 level
+ 2. Part 2  
+  2.1 $\beta = P(\text{not reject } H_0|\mu)$, i.e., $\beta$ when the true expected value is 0.8 is 1 minus the power at the point 0.8 = 1- S(0.8)  
+  2.2 The power at the point 0.7, S(0.7), can be estimated as 0.48 according to the figure  
+  2.3 $n=30$ patients are required for the power to be 0.95 at the point 0.7  
 
-## Några statistiska test med stickprov {.unnumbered}
 
-> Kortfattade svar till frågorna som ställs i uppgifterna finns i slutet på denna del av handledning.  Datamaterialen som används är albumin, bladklorofyll och dammar, vilka du hittar på Canvas.
 
-# Test av väntevärde i en population (t-test)
+## Some Statistical Tests with Samples {.unnumbered}
 
-> En blandning av blodserum innehåller exakt 42 g albumin per liter. Två laboratorier (A och B) får göra sex bestämningar var av koncentrationen.  Vi vill undersöka om det finns någon systematisk avvikelse från det sanna värdet (42 g/l) i var och en av dessa två grupper. 
+> Concise answers to the questions posed in the exercises are found at the end of this section of the guide. The data materials used are albumin, leaf chlorophyll, and dust, which you can find on Canvas.
+
+# Test of Population Mean (t-test)
+
+> A mixture of blood serum contains exactly 42 g of albumin per liter. Two laboratories (A and B) make six determinations each of the concentration. We want to investigate if there is any systematic deviation from the true value (42 g/l) in each of these two groups.
 
 ```{r}
 load("data/lab3_mini2_filer/albumin.RData")
 ```
 
 :::{.callout-note icon=false}
-### Uppgift 3.1
-Ange modell för A och B och specificera hypoteser för att testa om det finns en systematisk avvikelse från det sanna värdet i respektive grupp. Ledtråd: det ska vara en tvåsidig mothypotes. 
+### Exercise 3.1
+Specify the model for A and B and specify hypotheses to test if there is a systematic deviation from the true value in each group. Hint: it should be a two-sided alternative hypothesis.
 :::
 
-**Modell för grupp A:** Låt $X$ vara koncentration g albumin per liter i mätningar från laboration A. Väntevärde och varians för $X$ är $\mu_x$ och $\sigma^2_x$. Antag att mätningar är oberoende och likafördelade. Väntevärdet skattas med stickprovsmedelvärdet $\hat{\mu}_x=\bar{x}$. Enligt centrala gränsvärdessatsen är $\bar{x} \overset{A}{\sim} N(\mu_x,\frac{\sigma_x}{\sqrt{n_x}})$.
+**Model for group A:** Let $X$ be the concentration of g of albumin per liter in measurements from laboratory A. The mean and variance for $X$ are $\mu_x$ and $\sigma^2_x$. Assume that measurements are independent and identically distributed. The mean is estimated by the sample mean $\hat{\mu}_x=\bar{x}$. According to the central limit theorem, $\bar{x} \overset{A}{\sim} N(\mu_x,\frac{\sigma_x}{\sqrt{n_x}})$.
 
-**Hypoteser för grupp A:** <!-- ta bort detta och skriv dina hypoteser-->
+**Hypotheses for group A:** <!-- remove this and write your hypotheses-->
 
-**Modell för grupp B:** Låt $Y$ vara koncentration g albumin per liter i mätningar från laboration B.<!-- ta bort detta och fortsätt skriva din modell, ange antagande-->
+**Model for group B:** Let $Y$ be the concentration of g of albumin per liter in measurements from laboratory B. <!-- remove this and continue writing your model, specify assumptions-->
 
-**Hypoteser för grupp B:** <!-- ta bort detta och skriv dina hypoteser-->
+**Hypotheses for group B:** <!-- remove this and write your hypotheses-->
 
 :::{.callout-note icon=false}
-### Uppgift 3.2
-I R gör man dessa två t-test med nedanstående rutinen `t-test`. Tolka utskrifterna när du kör kommandot.  Hur stora är $p$-värdena och vad blir slutsatserna för respektive grupp? Vad blir konfidensintervallen för de förväntade koncentrationerna?
+### Exercise 3.2
+In R, perform these two t-tests using the following routine `t-test`. Interpret the outputs when you run the command. What are the p-values and what are the conclusions for each group? What are the confidence intervals for the expected concentrations?
 :::
 
 ```{r}
@@ -243,13 +239,13 @@ t.test(AlbuminA, mu=42)
 t.test(AlbuminB, mu=42)
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- remove this and write your conclusions in plain text -->
 
 :::{.callout-note icon=false}
-### Uppgift 3.3
-Antag att vi vill undersöka om **laboration B** under- respektive överskattar koncentrationer. I R gör man detta som ett ensidigt test med rutinen `t-test`. 
+### Exercise 3.3
+Suppose we want to investigate if **laboratory B** underestimates or overestimates concentrations. In R, this is done as a one-sided test using the routine `t-test`.
 
-Tolka utskriften för ensidiga test för laboration B. Vad händer med $p$-värden och intervall när man går från ensidigt till tvåsidiga alternativ? 
+Interpret the output for the one-sided test for laboratory B. What happens to the p-values and intervals when moving from one-sided to two-sided alternatives?
 :::
 
 ```{r}
@@ -257,78 +253,77 @@ t.test(AlbuminB, mu=42, alternative="less")
 t.test(AlbuminB, mu=42, alternative="greater")
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- remove this and write your conclusions in plain text -->
 
+# Comparison of Means in Two Populations (t-test for Two Independent Samples)
 
-# Jämförelse av väntevärden i två populationer (t-test vid  två oberoende stickprov)
-
-> Alger i fick växa under ljusa respektive mörka förhållanden och därefter mättes klorofyllhalt.
+> Algae were allowed to grow under light and dark conditions, and then the chlorophyll content was measured.
 
 ```{r}
 load("data/lab3_mini2_filer/alger.RData")
 ```
 
 :::{.callout-note icon=false}
-### Uppgift 4.1
-Gör en grafisk beskrivning av skillnaderna. Vad visar låd-diagrammet (boxplotten)?
+### Exercise 4.1
+Make a graphical description of the differences. What does the boxplot show?
 :::
 
 ```{r}
 boxplot(Alger$Klorofyll ~ Alger$Grupp)
 ```
 
-**Svar:**<!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- remove this and write your conclusions in plain text -->
 
 
 :::{.callout-note icon=false}
-### Uppgift 4.2
-Sätt upp modell och hypoteser, och undersök med ett t-test om det finns skillnader i förväntad klorofyllhalt mellan de två grupperna. 
+### Exercise 4.2
+Set up the model and hypotheses, and investigate with a t-test if there are differences in the expected chlorophyll content between the two groups.
 
-Detta kan man göra genom att lägga till gruppvariabeln i rutinen `t.test`. Tolka utskriften.
+This can be done by adding the group variable in the `t.test` routine. Interpret the output.
 :::
 
-**Modell:** Låt $X$ vara tillväxt hos alger i mörka förhållanden med väntevärde $\mu_x$ och varians $\sigma^2_x$, och $Y$ vara tillväxt hos alger i ljusa förhållanden med väntevärde $\mu_y$ och varians $\sigma^2_y$. Väntevärden skattas med stickprovsmedelvärden $\hat{\mu_x}=\bar{x}$ och $\hat{\mu_y}=\bar{y}$. Enligt centrala gränsvärdessatsen kommer skattningen av respektive väntevärde vara approximativt normalfördelad, d.v.s. $\bar{x} \overset{A}{\sim} N(\mu_x,\frac{\sigma_x}{\sqrt{n_x}})$ och $\bar{y} \overset{A}{\sim} N(\mu_y,\frac{\sigma_y}{\sqrt{n_y}})$. 
+**Model:** Let $X$ be the growth of algae in dark conditions with mean $\mu_x$ and variance $\sigma^2_x$, and $Y$ be the growth of algae in light conditions with mean $\mu_y$ and variance $\sigma^2_y$. The means are estimated by sample means $\hat{\mu_x}=\bar{x}$ and $\hat{\mu_y}=\bar{y}$. According to the central limit theorem, the estimation of each mean will be approximately normally distributed, i.e., $\bar{x} \overset{A}{\sim} N(\mu_x,\frac{\sigma_x}{\sqrt{n_x}})$ and $\bar{y} \overset{A}{\sim} N(\mu_y,\frac{\sigma_y}{\sqrt{n_y}})$.
 
-**Hypoteser:** $H_0: \mu_x = \mu_y$ mot $H_1: \mu_x \neq \mu_y$ 
+**Hypotheses:** $H_0: \mu_x = \mu_y$ vs. $H_1: \mu_x \neq \mu_y$ 
 
 ```{r}
 t.test(Alger$Klorofyll ~ Alger$Grupp)
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- remove this and write your conclusions in plain text -->
 
 
 :::{.callout-note icon=false}
-### Uppgift 4.3
-Om vi inte säger något annat förutsätter rutinen `t.test` att varianserna i de två grupperna, d.v.s. $\sigma^2_x$ och $\sigma^2_y$ är **olika** och kompenserar för det. Om vi vet (eller antar) att varianserna är lika, kan vi utnyttja det för att få högre frihetsgrader eftersom det är en parameter färre att skatta. 
+### Exercise 4.3
+If we don't specify otherwise, the `t.test` routine assumes that the variances in the two groups, i.e., $\sigma^2_x$ and $\sigma^2_y$, are **unequal** and adjusts for it. If we know (or assume) that the variances are equal, we can utilize that to obtain higher degrees of freedom since there's one less parameter to estimate.
 
-Undersök om varianserna är lika med ett så kallat $\chi^2$-test. Det gör man i R genom rutinen `var.test`. Tolka utskriften! 
+Investigate if the variances are equal using a so-called $\chi^2$-test. This is done in R using the `var.test` routine. Interpret the output!
 :::
 
-**Hypoteser**: $H_0: \sigma^2_x = \sigma^2_y$ mot $H_1: \sigma^2_x \neq \sigma^2_y$
+**Hypotheses**: $H_0: \sigma^2_x = \sigma^2_y$ vs. $H_1: \sigma^2_x \neq \sigma^2_y$
 ```{r}
 var.test(Alger$Klorofyll ~ Alger$Grupp)
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- remove this and write your conclusions in plain text -->
 
 
 :::{.callout-note icon=false}
-### Uppgift 4.4
-Gör om t-testet där du antar att varianser är lika genom att lägga till `var.equal=TRUE` i R-rutien. Vad blir dina slutsatser nu? 
+### Exercise 4.4
+Repeat the t-test assuming equal variances by adding `var.equal=TRUE` in the R routine. What are your conclusions now?
 :::
 
-**Antagande**: $\sigma^2=\sigma^2_x = \sigma^2_y$
+**Assumption**: $\sigma^2=\sigma^2_x = \sigma^2_y$
 
 ```{r}
 t.test(Alger$Klorofyll ~ Alger$Grupp, var.equal=TRUE)
 ```
 
-**Svar:** <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer:** <!-- remove this and write your conclusions in plain text -->
 
-# Test vid matchade data (stickprov i par)
+# Test with Matched Data (Paired Samples)
 
-> Det har gjorts mätningar av kvävebelastning under vår respektive sommar på ett antal dammar.  Om man vill jämföra kvävebelastningen mellan de två årstiderna är en rimlig modell "stickprov i par". 
+> Measurements of nitrogen load have been taken during spring and summer in a number of ponds. If one wants to compare the nitrogen load between the two seasons, a reasonable model is "paired samples."
 
 ```{r}
 load("data/lab3_mini2_filer/dammar.RData")
@@ -344,16 +339,16 @@ boxplot(Dammar$N_belast_V-Dammar$N_belast_S)
 abline(a=0,b=0,col='blue')
 ```
 
-**Modell:** Låt $D$ vara skillnaden i mätningar under vår och sommar för en damm. Slumpvariabeln $D$ har väntevärde $\mu$ och varians $\sigma^2$. Vi skapar ett stickprov $(d_1,...,d_n)$ för skillnader i mätvärden. Väntevärdet skattas med stickprovsmedelvärdet, $\hat{\mu}=\bar{d}$. Enligt centrala gränsvärdessatsen är $\bar{d} \overset{A}{\sim} N(\mu,\frac{\sigma}{\sqrt{n}})$. 
+**Model:** Let $D$ be the difference in measurements between spring and summer for a pond. The random variable $D$ has mean $\mu$ and variance $\sigma^2$. We create a sample $(d_1,...,d_n)$ for differences in measurement values. The mean is estimated by the sample mean, $\hat{\mu}=\bar{d}$. According to the central limit theorem, $\bar{d} \overset{A}{\sim} N(\mu,\frac{\sigma}{\sqrt{n}})$. 
 
 
 :::{.callout-note icon=false}
-### Uppgift 5.1
-Finns det en skillnad i väntevärden mellan vår och sommar? 
+### Exercise 5.1
+Is there a difference in means between spring and summer? 
 
-Vi testar det med följande **hypoteser:** $H_0: \mu = 0$ mot $H_1: \mu \neq 0$
+We test it with the following **hypotheses:** $H_0: \mu = 0$ vs. $H_1: \mu \neq 0$
 
-Detta är ett vanligt test och man behöver inte räkna ut ett nytt stickprov. För att tala om för `t.test` att data är matchade i par lägger man till paired=TRUE som argument.
+This is a common test, and one does not need to calculate a new sample. To inform `t.test` that the data is matched in pairs, one adds `paired=TRUE` as an argument.
 :::
 
 
@@ -361,13 +356,13 @@ Detta är ett vanligt test och man behöver inte räkna ut ett nytt stickprov. F
 t.test(Dammar$N_belast_V, Dammar$N_belast_S, paired=TRUE)
 ```
 
-**Svar**: <!-- ta bort detta och skriv dina slutsatser i enkel text -->
+**Answer**: <!-- remove this and write your conclusions in plain text -->
 
 
-## Svar till några av denna sektions frågor: {.unnumbered}  
+## Answers to Some of the Questions in This Section: {.unnumbered}  
 
-1. Svar  
-  3.2 A: p-värde$=0.033$; B: p-värde$=0.081$;  Vi kan påvisa en skillnad för A men inte för B. 95% konfidensintervall: A: $(42,06,\,42.94)$; B: $(35.69,\,42.51)$  
-  4.3 Varianserna är inte olika (p-värde$=0.48$)  
-  4.4 t-test: p-värde$=0.009$;  Vi kan påvisa en skillnad i klorofyll.  
-  5.1 p-värde$=0.262$ Vi kan inte påvisa någon skillnad  
+1. Answer  
+  3.2 A: p-value$=0.033$; B: p-value$=0.081$; We can detect a difference for A but not for B. 95% confidence intervals: A: $(42.06,\,42.94)$; B: $(35.69,\,42.51)$  
+  4.3 The variances are not different (p-value$=0.48$)  
+  4.4 t-test: p-value$=0.009$; We can detect a difference in chlorophyll.  
+  5.1 p-value$=0.262$ We cannot detect any difference.  
