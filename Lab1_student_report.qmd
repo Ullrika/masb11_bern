@@ -205,7 +205,7 @@ $\hat{\sigma} = s$ ("standard deviation for the sample").
 Calculate the estimated parameters and insert them into your model by writing
 
 ``` r
-m = mean(jordprov\$al)
+m = mean(jordprov$al)
 s = sd(jordprov$al)
 hist(jordprov$al,probability=TRUE)
 xx <- seq(40,120,by=0.2)
@@ -215,7 +215,11 @@ lines(xx,dnorm(xx,m,s))
 Now you can compare the density function from the model with the histogram of the sample. They should be quite similar for the model to be considered good.
 
 With this model, you can calculate probabilities and make predictions about future measurements. For example, you can calculate the probability that a new aluminum measurement will exceed 80 mg/g, or determine the aluminum level that will be exceeded by 10% of future measurements.
+
+What are the values on the estimated parameters?
 :::
+
+*Answer*: <!-- remove this and write your conclusions in simple text -->
 
 ::: {.callout-note icon="false"}
 ### Task 3.3
@@ -262,7 +266,7 @@ Now you need to estimate the probability that a calcium measurement exceeds 30 m
 ::: {.callout-note icon="false"}
 ### Task 4.3
 
-If $Y=$ calcium level, we are looking for $P(Y>30)$, which is equivalent to $P(\log(Y) > \log(30))$. If $Y$ follows a lognormal distribution, then $\log(Y)$ follows a normal distribution. Set up a model for $\log(Y)$ and estimate its parameters. What distribution do the estimated parameters have?
+If $Y=$ calcium level, we are looking for $P(Y>30)$, which is equivalent to $P(\log(Y) > \log(30))$. If $Y$ follows a lognormal distribution, then $\log(Y)$ follows a normal distribution. Set up a model for $\log(Y)$ and estimate its parameters. What values do the estimated parameters have?
 
 :::
 
@@ -276,3 +280,5 @@ Calculate the probability that \texttt{log(calcium level)} exceeds $\log(30)$. P
 
 
 *Answer*: <!-- remove this and write your conclusions in simple text -->
+
+
