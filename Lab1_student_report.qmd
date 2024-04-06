@@ -275,7 +275,7 @@ If $Y=$ calcium level, we are looking for $P(Y>30)$, which is equivalent to $P(\
 ::: {.callout-note icon="false"}
 ### Task 4.4
 
-Calculate the probability that \texttt{log(calcium level)} exceeds $\log(30)$. Provide the command you use to perform this calculation."
+Calculate the probability that log(calcium levels) exceeds $\log(30)$. Provide the command you use to perform this calculation.
 :::
 
 
