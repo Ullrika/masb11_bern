@@ -232,7 +232,7 @@ Suppose you want to calculate the probability that the aluminum level in a sampl
 ::: {.callout-note icon="false"}
 ### Task 3.4
 
-The aluminum level that will be exceeded by 10% of future measurements is a quantile in the normal distribution. Use R to calculate the quantile with the command `qnorm(0.1,m,s)`.
+The aluminum level that will exceed 10% of future measurements is a quantile in the normal distribution. Use R to calculate the quantile with the command `qnorm(0.1,m,s)`.
 :::
 
 *Answer*: <!-- remove this and write your conclusions in simple text -->
