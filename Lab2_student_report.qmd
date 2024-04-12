@@ -86,18 +86,10 @@ Also create variables `unif3`, `unif4`, and `unif5` in a similar way and study t
 **Answer**: <!-- remove this and write your conclusions in simple text -->
 
 :::{.callout-note icon=false}
-### Task 1.4
-Create variables `unif3`, `unif4`, and `unif5` in a similar way and study the distribution for $X_1+X_2+\ldots+X_5$. Does it seem reasonable that the larger $n$ is, the better the distribution for the sum can be fitted to a normal distribution?
-:::
-
-```{r}
-# write your R code here
-```
-
-**Answer**: <!-- remove this and write your conclusions in simple text -->
 
 :::{.callout-note icon=false}
-### Task 1.5
+
+### Task 1.4
 Try what happens when you sum exponentially distributed random variables with mean 1 (`rexp(1000,1)`). How many variables need to be summed before the sum can be approximated with a normal distribution?
 :::
 
