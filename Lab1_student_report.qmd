@@ -45,7 +45,7 @@ load("data/lab1_filer/jordprov.Rdata")
 # write your R-code here
 ```
 
-# Överblick av datamaterialet
+# Overview of the data material
 
 > Firstly, you would want to calculate some summary statistics for the
 > data (mean, min, max, standard deviation, etc.) and visualize some

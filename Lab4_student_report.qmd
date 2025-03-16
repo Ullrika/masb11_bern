@@ -5,7 +5,10 @@ abstract: |
   The purpose of today's lab is for you to:
 
   - become familiar with functions in R for correlation and regression analysis
-  - work on Mini project II.
+  - practice constructing a reasonable statistical model using collected data, as well as critically reviewing the model and its ability to describe reality
+  - apply your knowledge and analyse a biostatistical dataset using R
+  - practice presenting assumptions, models, and conclusions from a statistical analysis in writing
+  
 author: 
   - name: "Your Name"
 date: today
@@ -35,7 +38,7 @@ format:
 Complete exercise 6.10 in the workbook.
 :::
 
-# Introduction - Regression Analysis in R {.unnumbered}
+# 1. Introduction - Regression Analysis in R {.unnumbered}
 
 # Length and Age of Cod Fish
 
@@ -44,7 +47,7 @@ Complete exercise 6.10 in the workbook.
 | Individual  | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  |
 |-------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 | Length (cm) | 15  | 30  | 35  | 50  | 55  | 60  | 58  | 25  | 12  | 43  |
-| Age (år)    | 1   | 2   | 3   | 4   | 5   | 6   | 5   | 2   | 1   | 4   |
+| Age (yearr)    | 1   | 2   | 3   | 4   | 5   | 6   | 5   | 2   | 1   | 4   |
 
 ::: {.callout-note icon="false"}
 ### Task 1.1
@@ -70,7 +73,7 @@ plot(codfish$Age, codfish$Length)
 
 **Answer:** <!-- Remove this and write your conclusions in plain text -->
 
-# Correlation analysis of the relationship between length and age in codfish
+# 2. Correlation analysis of the relationship between length and age in codfish{.unnumbered}
 
 > We begin by examining the relationship between the variables using the correlation coefficient.
 
@@ -96,7 +99,7 @@ cor.test(codfish$Age, codfish$Length)
 
 **Answer:** <!-- Remove this and write your conclusions in plain text -->
 
-# Simple linear regression for the relationship between length and age of codfish
+# 3. Simple linear regression for the relationship between length and age of codfish{.unnumbered}
 
 > We will now examine how the relationship between the variables looks by fitting a straight line to the data. The command `lm(y ~ x)` fits a linear model for the dependent variable `y` as a function of one or more explanatory variables `x` (lm is short for linear model). Then, we can obtain various properties of the model and estimates using additional commands.
 
@@ -131,7 +134,7 @@ abline(model)
 ```
 
 
-## Assumption Checking {.unnumbered}
+## 4. Assumption Checking {.unnumbered}
 
 > We will now check three of the assumptions in the analysis, namely (1) residuals are independent, (2) normally distributed, and (3) have equal variance. The assumption of independence is assessed by understanding how the data was collected. In this case, we don't have much information, except that the measurements were taken on different individuals caught in a day. We find no reason to assume dependence, and we examine the remaining assumptions by studying the residuals. The residuals in the fitted model are computed with the command"
 
@@ -166,7 +169,7 @@ Does the assumption of normality seem to be met?
 
 **Answer:** <!-- Remove this and write your conclusions in plain text -->
 
-## Predictions and confidence intervals {.unnumbered}
+## 5. Predictions and confidence intervals {.unnumbered}
 
 > A regression model can be used to forecast or predict the expected value or the individual value of $y$ given $x=x_0$. In the formula collection, we have the following formulas for confidence intervals (refer to the formula collection for explanations of all symbols).
 
@@ -213,7 +216,7 @@ What length is a seven year old codfish expected to have? Provide with confidenc
 
 **Answer:** <!-- Remove this and write your conclusions in simple text -->
 
-# Regression Analysis of the Relationship between Concentration and Absorbance
+# 6. Regression Analysis of the Relationship between Concentration and Absorbance{.unnumbered}
 
 In the lab "Protein Determination According to the Bradford Method" in the cell biology course, absorbance was investigated for samples with different dilutions of Bovine Serum Albumin (BSA) standard. Samples with 0-10 µg of protein were diluted to 100 µl with water, and two samples were prepared per concentration.
 
@@ -296,8 +299,6 @@ c0
 
 **Answer:** <!-- Remove this and write your conclusions in simple text -->
 
-## Continue working on Mini project II, see laboration 3 {.unnnumbered}
-
 **Some answers**:\
 2.1. Yes! $r = 0.9828, t=15.071$; p-värde=0.000 - you can reject the hypothesis that there is no linear association\
 3.1. $R^2=0.966$; $s_e = 3.443$; $\hat{\beta_0}=b_0=5.993$; $\hat{\beta_1}=b_1=9.790$; $I_{\beta_1}=(8.29, 11.29)$; $p=3.72\cdot 10^{-7}$\
@@ -322,3 +323,43 @@ predict(model, x0, interval="confidence")      #… with a confidence interval
 predict(model, x0, interval="prediction")      #… with a prediction interval
 residuals(model)               #Residuals
 ```
+
+# 5. Statistic analysis {.unnumbered}
+
+This is a continuation of the data material from the study of the activation program from laboration 3. 
+
+Some researchers argue that cholesterol levels increase with age, while others believe that factors such as smoking and sedentary lifestyle are more significant. In the variables `Aalder` and `Balder`, the ages of the men examined at the start of the study are recorded. 
+
+Do our data at the start of the study indicate that age affects cholesterol levels?
+
+## Suggested workflow{.unnumbered}
+
+Since these are measurements before the activation campaign and you want large samples, it is advisable to merge data from groups A and B. Below is an example of how to do this.
+
+```{r}
+load("C:/Rfolder/masb11_students/data/lab3_filer/blodprov.Rdata")
+df <- data.frame(
+  alder = c(kolesterol$Aalder,kolesterol$Balder),
+  kolesterol = c(kolesterol$Afore,kolesterol$Bfore)
+)
+```
+
+
+Plot cholesterol content against age and examine with a statistical method whether cholesterol levels, apart from random factors, can be described by a function of age. 
+
+In the course, we have gone through simple linear regression and correlation analysis to investigate relationships between continuous variables. Consider which of the methods is most suitable for this particular dataset? Feel free to discuss with the lab/exercise supervisor before proceeding.
+
+
+## Instruktioner för rapportering i del 6{.unnumbered}
+
+Please specify (if appropriate):
+
+  - what assumptions you make about data,
+  
+  - which models you are specifying,
+  
+  - which hypothesis you use
+  
+- Justify the results of the analysis and what interpretations and conclusions you make.
+
+- To pass task 5, avoid referring to the R-code to describe what you have done.

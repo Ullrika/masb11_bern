@@ -6,7 +6,8 @@ abstract: |
    
   - illustrate the Central Limit Theorem (CLT) using simulation
   - apply CLT in a practical situation
-  - work on Mini Project I for the course
+  - fit models and make conclusions
+  
 author: 
   - name: "Insert Your Name Here"
 date: today
@@ -45,7 +46,7 @@ Review what you did in Lab 1 and the methods you use for simulating random numbe
 :::
 
 
-# Central Limit Theorem
+# 1. Central Limit Theorem{.unnumbered}
 
 > If one adds (or calculates the mean) of several independent normally distributed random variables, the sum is also normally distributed. But what happens if one adds several variables that are all uniformly distributed? What distribution is obtained if one adds exponentially distributed variables?
 >
@@ -58,7 +59,8 @@ Simulate 1000 random numbers from a uniform distribution, $R(0, 1)$, and store t
 
 ```{r}
 unif1 <- runif(1000,0,1)
-# write your R code here
+hist(unif1)
+qqnorm(unif1)
 ```
 
 <!-- remove this and write your conclusions in simple text -->
@@ -69,6 +71,8 @@ Simulate 1000 new random numbers from a uniform distribution, $R(0, 1)$, and sto
 :::
 
 ```{r}
+unif2 <- runif(1000,0,1)
+sum12 <- unif1 + unif2
 # write your R code here
 ```
 
@@ -80,32 +84,39 @@ Also create variables `unif3`, `unif4`, and `unif5` in a similar way and study t
 :::
 
 ```{r}
+sum12345 <- runif(1000,0,1) + runif(1000,0,1) + runif(1000,0,1) + runif(1000,0,1) + runif(1000,0,1)
 # write your R code here
 ```
 
 **Answer**: <!-- remove this and write your conclusions in simple text -->
 
 :::{.callout-note icon=false}
-
-:::{.callout-note icon=false}
-
 ### Task 1.4
 Try what happens when you sum exponentially distributed random variables with mean 1 (`rexp(1000,1)`). How many variables need to be summed before the sum can be approximated with a normal distribution?
 :::
 
 ```{r}
-# write your R code here
+# you could make a for loop for the calculations
+
+n = 10 # number of independent random variables - change until you think the sum looks normally distributed
+sumn <- rexp(1000,1)
+for(i in 1:(n-1)){
+  sumn <- sumn + rexp(1000,1)
+}
+hist(sumn)
+qqnorm(sumn)
+qqline(sumn)
 ```
 
 **Answer**: <!-- remove this and write your conclusions in simple text -->
 
-# CLT in Practice
+# 2. CLT in Practice{.unnumbered}
 
-> In 35 patients with Hodgkin's disease, the number of T4 cells in the blood (number/mm3) was measured. At the same time, the corresponding number was measured in 35 patients with other diseases (Non-Hodgkin). Data are in the file `data/lab2_mini1_files/Hodgkindata.RData`. Load the data with `load()`. You now have two new variables Hodgkin and NonHodgkin.
+> In 35 patients with Hodgkin's disease, the number of T4 cells in the blood (number/mm3) was measured. At the same time, the corresponding number was measured in 35 patients with other diseases (Non-Hodgkin). Data are in the file `data/lab2_files/Hodgkindata.RData`. Load the data with `load()`. You now have two new variables Hodgkin and NonHodgkin.
 
 
 ```{r}
-load("data/lab2_mini1_filer/Hodgkindata.RData")
+load("data/lab2_filer/Hodgkindata.RData")
 ```
 
 :::{.callout-note icon=false}
@@ -154,4 +165,78 @@ Is it a significant issue that the number of blood cells is not normally distrib
 
 **Answer**: <!-- Remove this and write your conclusions in plain text -->
 
-> Run (Render) this file to an HTML (open in a browser and print to PDF) or a PDF and upload your PDF as a lab report on Canvas. Then proceed with Mini Project I during lab 2!
+# 3. Provtagningstider - problemställningar från labbet{.unnumbered}
+
+Målsättningen med denna uppgift är att du ska 
+
+- practice extracting a problem from reality and constructing a reasonable statistical model using collected data,
+  
+- critically review the model and its ability to describe reality,
+
+- apply your knowledge and analyze a biostatistical dataset using R, and
+
+- practice presenting assumptions, models, and conclusions from a statistical analysis in writing.
+
+## Background{.unnumbered}
+
+At our chemistry laboratory, we analyse various samples from the nearby sampling center. There have been strong requests for certain patients who are undergoing tests to be able to meet with a doctor during the same visit and not have to schedule different days for sampling and doctor appointments. In order for this request to be fulfilled, we need to understand the time it takes from when the sample is taken from the patient until the analysis results are ready and investigate whether it is reasonable to have patients wait for test results on the same day. There are several factors to consider: the sample may wait at the sampling center until it is picked up by our laboratory, there is a certain manual handling time for the sample, and finally, we have the processing time in the machine itself. Additionally, we have slightly different handling times depending on the day of the week and whether it is morning or afternoon.
+
+In the data files `data/lab2_filer/proverfm24.RData` and `data/lab2_filer/proverem24.RData`, there are times (in minutes) it took "from the patient's arm to result of the analysis". The sample is for "general chemistry", and as you can see, we have divided the data into two files, one for samples taken in the morning and one for samples taken in the afternoon. When we create a histogram of this data, we see that it does not appear to follow a normal distribution. This seems reasonable since time has a lower bound. This means that we should use an appropriate distribution to model waiting times in this task.
+
+## Questions{.unnumbered}
+
+::: {.callout-tip}
+
+Läs igenom avsnitten Suggested workflow and Instruction for reporting before you answer questions 3.1 to 3.4
+:::
+
+:::{.callout-note icon=false}
+### Question 3.1. 
+How likely is it that a morning patient waits more than two hours for the analysis result?
+:::
+
+:::{.callout-note icon=false}
+### Question 3.2. 
+
+We want to be able to say that 95\% of afternoon patients will have their test result faster than $y$ minutes. What is the statistical term for $y$? What value does $y$ have according to the model you have chosen for the afternoon times?
+:::
+
+:::{.callout-note icon=false}
+### Question 3.3. 
+
+There are usually slightly more patients in the afternoon compared to the morning. Let's assume that 60\% of patients come in the morning and the rest in the afternoon. How likely is it that a patient sample taken at any time during the day takes more than two hours to analyze?
+:::
+
+:::{.callout-note icon=false}
+### Question 3.4. 
+
+If we have 25 patient samples in the morning, what is the probability that the **average time** for these 25 samples exceeds one hour?
+:::
+
+## Suggested workflow{.unnumbered}
+
+- Examine the data (histogram, empirical distribution function). Calculate simple measures (mean, standard deviation). Compare morning and afternoon times.
+
+- Set up an appropriate model (probability distribution) for the morning times and estimate the parameters in the model.
+
+- Do the same for the afternoon times.
+
+- Answer questions (3.1)--(3.3) by utilising the fitted models (probability distributions) for morning and afternoon times.
+
+- For question 3.4, consider which probability distribution is suitable as a model for the average time (mean) of 25 morning times. State which theoretical result (refer to a famous theorem) you use to justify your choice of model! Use the "simple summaries" you calculated earlier (mean and standard deviation of the sample) to estimate parameters in your model for the average time.
+
+## Instruction for reporting{.unnumbered}
+
+Please specify (if appropriate):
+
+  - what assumptions you make about data,
+  
+  - which models you are specifying,
+  
+  - which theorems you use.
+
+- Present the results of the analysis and what interpretations and conclusions you make.
+
+- Summarise your results for sampling times.
+
+- To pass task 3, avoid referring to the R-code to describe what you have done.

@@ -1,6 +1,6 @@
 ---
 title: "Introduction to using R with Quarto" 
-subtitle: "MASB11 VT 24" # something following a hash-sign will not be shown in the report
+subtitle: "MASB11 VT 25" # something following a hash-sign will not be shown in the report
 execute: 
   echo: true    #use to see/hide R-code in the report
 number-sections: true #secetions can be automatically numbered 

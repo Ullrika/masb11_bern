@@ -8,7 +8,10 @@ abstract: |
   (e.g., significance level and power) and what conclusions can
   be drawn from the analysis
   - familiarize yourself with some of the functions available in R regarding various basic statistical tests
-  - work on the course's Mini Project II.
+  - practice constructing a reasonable statistical model using collected data, as well as critically reviewing the model and its ability to describe reality
+  - apply your knowledge and analyse a biostatistical dataset using R
+  - practice presenting assumptions, models, and conclusions from a statistical analysis in writing
+  
 author: 
   - name: "Your Name"
 date: today
@@ -51,7 +54,8 @@ Load R functions needed for the lab. These functions come from the R package **R
 source("kod/funktioner_raknamedvariation_light.R")
 ```
 :::
-# Basic Concepts in Hypothesis Testing
+
+# 1. Basic Concepts in Hypothesis Testing{.unnumbered}
 
 > Medication can reduce salivary gland function, which is a risk factor for cavities and other oral diseases. Saliva stimulated by chewing was measured for 5 minutes in 7 randomly selected patients, all receiving the same medication. The normal saliva amount under these conditions is 1 ml/min, and dry mouth is considered when the saliva amount is below 0.7 ml/min. The model assumed that the saliva amount is normally distributed with mean $\mu$ and standard deviation $\sigma$, where $\sigma$ is considered to be 0.5 ml/min. Interesting questions include:
 > 
@@ -59,7 +63,7 @@ source("kod/funktioner_raknamedvariation_light.R")
 > - If the medication results in an average saliva production of 0.8 ml/min, how likely are we to miss the reduced saliva production with our test?
 > - How many patients should we measure if we want the test to detect reduced saliva production at 0.7 ml/min with a probability of 0.95? 
 >
-> On the course website, you will find data in the file `salivary.RData`. Concise answers to the questions posed in the tasks are provided at the end of this part of the guide.
+> On the course website, you will find data in the file `saliv.RData`. Concise answers to the questions posed in the tasks are provided at the end of this part of the guide.
 
 :::{.callout-note icon=false}
 ### Task 1.1
@@ -87,7 +91,10 @@ Use the routine `hypotes` to illustrate the test's critical region when the test
 :::
 
 ```{r}
-# Write your R code here
+#| warning: false
+#| message: false
+
+hypotes(0.5, 7, 1, 0.5, '<')
 ```
 
 
@@ -126,12 +133,15 @@ Examine how the critical region changes when you change the significance level t
 :::
 
 ```{r}
+#| warning: false
+#| message: false
+
 # write your R code here
 ```
 
 **Answer:** <!-- remove this and write your conclusions in plain text -->
 
-# Test Power and Power Function
+# 2. Test Power and Power Function{.unnumbered}
 
 > Now assume that the average saliva secretion in the risk group is 0.8. Then, of course, $H_0: \mu = 1$ is false, and we want our test to detect this and reject this hypothesis in favor of the hypothesis $H_1: \mu < 1$. The probability that the test actually accomplishes this is called the test power at the point 0.8. Use the routine `hypotes` to illustrate the test power at the point 0.8. The command now is `hypotes(`$\sigma$, $n$, $\mu_0$, $\alpha$, H1-direction, true $\mu$`), so in this case, you write `hypotes(0.5, 7, 1, 0.05, '<', 0.8)`.
 
@@ -155,8 +165,9 @@ $$
 
 Note that the power depends on the value of $\mu$. In this example, the smaller $\mu$ is relative to $\mu_0= 1$, the greater the chance that the test will detect that $H_0$ is not true. Therefore, it is interesting to study the power as a function of $\mu$, and this function is often denoted $S(\mu)$.
 
-The routine \texttt{styrkefkn} draws the power function. The command is \texttt{styrkefkn($\sigma$, $n$,   $\mu_0$, $\alpha$, H1-direction, true $\mu$)} if you want to draw the function and mark a specific $\mu$ value. So, you use the command `styrka(0.5, 7, 1, 0.05, '<', 0.8)`, which gives you the previous figure plus the power as a function of $\mu$.
+The command `styrka(0.5, 7, 1, 0.05, '<', 0.8)` gives you the previous figure plus the power as a function of $\mu$.
 :::
+
 
 ```{r}
 #| fig-width: 7
@@ -203,17 +214,12 @@ How many patients should we measure if we want to have a 0.95 probability of det
   2.3 $n=30$ patients are required for the power to be 0.95 at the point 0.7  
 
 
-
-## Some Statistical Tests with Samples {.unnumbered}
-
-> Concise answers to the questions posed in the exercises are found at the end of this section of the guide. The data materials used are albumin, leaf chlorophyll, and dust, which you can find on Canvas.
-
-# Test of Population Mean (t-test)
+# 3. Test of Population Mean (t-test){.unnumbered}
 
 > A mixture of blood serum contains exactly 42 g of albumin per liter. Two laboratories (A and B) make six determinations each of the concentration. We want to investigate if there is any systematic deviation from the true value (42 g/l) in each of these two groups.
 
 ```{r}
-load("data/lab3_mini2_filer/albumin.RData")
+load("data/lab3_filer/albumin.RData")
 ```
 
 :::{.callout-note icon=false}
@@ -255,12 +261,12 @@ t.test(AlbuminB, mu=42, alternative="greater")
 
 **Answer:** <!-- remove this and write your conclusions in plain text -->
 
-# Comparison of Means in Two Populations (t-test for Two Independent Samples)
+# 4. Comparison of Means in Two Populations (t-test for Two Independent Samples){.unnumbered}
 
 > Algae were allowed to grow under light and dark conditions, and then the chlorophyll content was measured.
 
 ```{r}
-load("data/lab3_mini2_filer/alger.RData")
+load("data/lab3_filer/alger.RData")
 ```
 
 :::{.callout-note icon=false}
@@ -321,21 +327,25 @@ t.test(Alger$Klorofyll ~ Alger$Grupp, var.equal=TRUE)
 
 **Answer:** <!-- remove this and write your conclusions in plain text -->
 
-# Test with Matched Data (Paired Samples)
+# 5. Test with Matched Data (Paired Samples){.unnumbered}
 
 > Measurements of nitrogen load have been taken during spring and summer in a number of ponds. If one wants to compare the nitrogen load between the two seasons, a reasonable model is "paired samples."
 
 ```{r}
-load("data/lab3_mini2_filer/dammar.RData")
+load("data/lab3_filer/dammar.RData")
 ```
 
 ```{r}
-boxplot(Dammar$N_belast_V, Dammar$N_belast_S)
+boxplot(Dammar$N_belast_V, Dammar$N_belast_S,
+        ylab = "nitrogen load",
+        xlab = "season",
+        names = c("Spring","Summer"))
 ```
 
-
 ```{r}
-boxplot(Dammar$N_belast_V-Dammar$N_belast_S)
+
+boxplot(Dammar$N_belast_V-Dammar$N_belast_S,
+        main = "difference in nutrient load spring-summer")
 abline(a=0,b=0,col='blue')
 ```
 
@@ -366,3 +376,62 @@ t.test(Dammar$N_belast_V, Dammar$N_belast_S, paired=TRUE)
   4.3 The variances are not different (p-value$=0.48$)  
   4.4 t-test: p-value$=0.009$; We can detect a difference in chlorophyll.  
   5.1 p-value$=0.262$ We cannot detect any difference.  
+  
+# 6. Had our activation program an effect?{.unnumbered}
+
+
+## Problem specification in the study{.unnumbered}
+
+Most researchers believe that high cholesterol levels in the blood are a risk factor for heart and vascular diseases. In a study, we wanted to investigate whether a multi-factor activation program (smoking cessation, mental, and physical training) could reduce cholesterol levels. We started with a group of 40 smoking men, all of whom had slightly elevated blood cholesterol levels. From these 40, we randomly selected 20 (Group A) to undergo our activation program. 
+
+The remaining 20 (Group B) continued with their usual lifestyle, at least as far as we perceived it. After six months, we measured the cholesterol levels (mmol/l) in all 40 men again.
+
+In the file `blodprov.Rdata` there is data with the variables ´Afore´,  ´Aefter´, ´Bfore´ and ´Befter´. 
+
+## Questions{.unnumbered}
+
+:::{.callout-note icon=false}
+### Question 6.1 
+
+Since we randomly selected the 20 individuals to undergo the activation program, there should be no differences between Group A and Group B regarding average cholesterol levels **before** the study begins. However, we want to ensure this explicitly so that we do not introduce a systematic difference between the groups from the start. 
+
+Is there a difference between the groups? Investigate with a suitable statistical test.
+
+:::
+
+:::{.callout-note icon=false}
+### Question 6.2 
+
+Has the expected cholesterol level decreased in Group A? Investigate with a suitable statistical test.
+:::
+
+:::{.callout-note icon=false}
+### Question 6.3 
+
+It is not unlikely that patients in Group B, even though they do not undergo the activation program, may still be affected in their cholesterol levels because attention to the issues may have an effect (a placebo effect). 
+
+Does this seem to be the case in our study? Study if there is a difference in cholesterol levels in patients in group B before and after the program. Investigate with a suitable statistical test.
+:::
+
+:::{.callout-note icon=false}
+### Question 6.4
+
+Did the activation program reduce the expected cholesterol level in Group A? Investigate with a suitable statistical test if the activation program affects the two groups differently?
+:::
+
+
+## Instruction for reporting{.unnumbered}
+
+Please specify (if appropriate):
+
+  - what assumptions you make about data,
+  
+  - which models you are specifying,
+  
+  - which hypothesis you use,
+  
+  - which theorems you use.
+
+- Present the results of the analysis and what interpretations and conclusions you make.
+
+- To pass task 6, avoid referring to the R-code to describe what you have done.
